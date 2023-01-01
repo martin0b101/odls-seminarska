@@ -35,16 +35,3 @@ class UserItemData:
 
 
 
-md = br.MovieData("data/movies.dat")
-print(md.get_title(1))
-uid = UserItemData("data/user_ratedmovies.dat")
-
-
-
-items = [1, 3, 20, 50, 100]
-movies_from_user = uid.get_all_items_of_user(78)
-print(movies_from_user['movieID'].max())
-print(movies_from_user['movieID'].min())
-for item in items:
-    print("Film: {}, ocena: {}".format(md.get_title(item), 1))
-

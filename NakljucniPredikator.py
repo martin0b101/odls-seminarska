@@ -27,8 +27,6 @@ class RandomPredictor:
 md = bf.MovieData("data/movies.dat")
 print(md.get_title(1))
 uid = BranjeOcen.UserItemData("data/user_ratedmovies.dat")
-
-
 rp = RandomPredictor(1, 5)
 rp.fit(uid)
 pred = rp.predict(78)
