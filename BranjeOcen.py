@@ -1,4 +1,4 @@
-import pickle
+
 import pandas as pd
 import BranjeFilmov as br
 import datetime
@@ -11,7 +11,7 @@ class UserItemData:
     #konstruktor
 
     def __init__(self, path, from_date=None, to_date=None, min_ratings=0):
-        self.df = pd.read_csv(path, "\t")
+        self.df = pd.read_csv(path, "\t", encoding='ISO-8859-1')
 
         #split from date to day, month, year
         if (from_date != None):
@@ -31,7 +31,7 @@ class UserItemData:
         print(len(self.df['userID']))
 
     def get_all_items_of_user(self, user_id):
-        return self.df[self.df['userID'] == user_id]
+        return self.df
 
 
 
@@ -43,7 +43,8 @@ uid = UserItemData("data/user_ratedmovies.dat")
 
 items = [1, 3, 20, 50, 100]
 movies_from_user = uid.get_all_items_of_user(78)
-print(movies_from_user)
+print(movies_from_user['movieID'].max())
+print(movies_from_user['movieID'].min())
 for item in items:
     print("Film: {}, ocena: {}".format(md.get_title(item), 1))
 
