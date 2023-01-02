@@ -11,11 +11,13 @@ class RandomPredictor:
 
     def predict(self, user_id):
         user_ratings = dict()
-        min_movieID = self.user_item_data.df["movieID"].min()
-        max_movieID = self.user_item_data.df["movieID"].max()
-        for movieID in range(min_movieID, max_movieID):
+        #min_movieID = self.user_item_data.df["movieID"].min()
+        #max_movieID = self.user_item_data.df["movieID"].max()
+        list_of_movieIDs = list(set(self.user_item_data.get_all_movies_id()))
+        list_of_movieIDs.sort()
+        #print('list of ids ', list_of_movieIDs)
+        for movieID in list_of_movieIDs:
             user_ratings[movieID] = random.randint(self.min, self.max)
-
         return user_ratings
 
     def fit(self, user_item_data):

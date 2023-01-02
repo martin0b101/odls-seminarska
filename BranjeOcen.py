@@ -1,4 +1,3 @@
-
 import pandas as pd
 import BranjeFilmov as br
 import datetime
@@ -28,10 +27,32 @@ class UserItemData:
         self.df = self.df.groupby("movieID").filter(lambda ratings: len(ratings) >= min_ratings)
 
     def nratings(self):
-        print(len(self.df['userID']))
+        return len(self.df['rating'])
 
-    def get_all_items_of_user(self, user_id):
-        return self.df
+    def get_watched_movie_list(self, userId):
+        return self.df[self.df["userID"] == userId]['movieID'].values
+    
+    def get_all_movies_id(self):
+        return self.df['movieID'].values
 
+    #vs - vsota vseh ocen za film movieId
+    def get_sum_rating_movie(self, movieId):
+        return sum(self.df[self.df['movieID'] == movieId]['rating'])
+   
 
+    def get_sum_rating_all_movies(self):
+        return sum(self.df['rating'])
+    
+    # n - stevilo ocen ki jih je dobil film
+    def get_number_rating_movie(self, movieId):
+        return len(self.df[self.df['movieID'] == movieId])
+
+# movie id 53355 sonnenallee
+uid = UserItemData("data/user_ratedmovies.dat")
+#n = uid.get_number_rating_movie(53355)
+#vs = uid.get_sum_rating_movie(53355)
+#b = 0
+#g_avg = (uid.get_sum_rating_all_movies() / uid.nratings())
+#avg = (vs + b * g_avg) / (n + b)
+#print(avg)
 
