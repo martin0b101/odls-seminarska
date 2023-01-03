@@ -27,7 +27,7 @@ class UserItemData:
         self.df = self.df.groupby("movieID").filter(lambda ratings: len(ratings) >= min_ratings)
 
     def nratings(self):
-        return len(self.df['rating'])
+        return len(self.df['rating'].values)
 
     def get_watched_movie_list(self, userId):
         return self.df[self.df["userID"] == userId]['movieID'].values
@@ -52,14 +52,17 @@ class UserItemData:
 
 
 # movie id 53355 sonnenallee
-uid = UserItemData("data/user_ratedmovies.dat", min_ratings=1000)
-#n = uid.get_number_rating_movie(53355)
-#vs = uid.get_sum_rating_movie(53355)
-#b = 0
-#g_avg = (uid.get_sum_rating_all_movies() / uid.nratings())
-#avg = (vs + b * g_avg) / (n + b)
-#print(avg)
+uid = UserItemData("data/user_ratedmovies.dat")
 
+
+print(len(set(uid.df['movieID'].values)))
+n = uid.get_number_rating_movie(50)
+vs = uid.get_sum_rating_movie(50)
+b = 100
+g_avg = (uid.get_sum_rating_all_movies() / uid.nratings())
+avg = (vs + b * g_avg) / (n + b)
+print(avg)
+'''
 import math
 import numpy as np
 from numpy.linalg import norm
@@ -116,3 +119,5 @@ def adjusted_cosine_similarity(p1, p2):
   return numerator / (den1 * den2)
 
 print(adjusted_cosine_similarity(p1, p2))
+
+'''
