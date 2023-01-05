@@ -13,12 +13,12 @@ class Recommender:
         self.user_item_data = user_item_data
         self.predicator.fit(self.user_item_data)
 
+    #TODO: get all movies and then get first n best graded
     def recommend(self, userID, n=10, rec_seen=True):
         predicted_grade = self.predicator.predict(userID)
         recommendet_movies = []
         watched_movie_list = list(self.user_item_data.get_watched_movie_list(userID))
         if (rec_seen):
-        
             for movieId, grade in predicted_grade.items():
                 if movieId in watched_movie_list:
                     if len(recommendet_movies) == n:
@@ -30,7 +30,9 @@ class Recommender:
                     if len(recommendet_movies) == n:
                         break
                     recommendet_movies.append((movieId, grade))
-        return recommendet_movies
+        #sort recomended movies
+        recommendet_movies_sort = sorted(recommendet_movies, key=lambda t: t[1], reverse=True)
+        return recommendet_movies_sort
 
 md = bf.MovieData('data/movies.dat')
 uim = bo.UserItemData('data/user_ratedmovies.dat')

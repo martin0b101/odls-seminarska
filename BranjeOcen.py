@@ -50,11 +50,21 @@ class UserItemData:
     def get_rating_of_movie(self, movieId):
         return list(self.df[self.df['movieID'] == movieId]['rating'].values)
 
+    def get_all_users(self):
+        return list(set(uid.df['userID']))
+
+    def get_number_users_rated_movies(self, movie_id1, movie_id2):
+        return len(self.df[(self.df['movieID'] == movie_id1) | (self.df['movieID'] == movie_id2)]['userID'])
+
+
 
 # movie id 53355 sonnenallee
 uid = UserItemData("data/user_ratedmovies.dat", min_ratings=1000)
 
+#number of users that rated two movies
+#print(len((uid.df[(uid.df['movieID'] == 1580) | (uid.df['movieID']==2719)]['userID'])))
 
+'''
 #get all users id
 users = list(set(uid.df['userID']))
 #print('users=', users)
@@ -68,7 +78,6 @@ for user in users:
 #print(user_avg)
 #print all rating and userId where movieId is 1580
 frist_line_in_fromula = 0
-second_line_in_fromula = 0
 movie1_sqrt = 0
 movie2_sqrt = 0
 for user, avg in user_avg.items(): 
@@ -94,6 +103,7 @@ print("similarity", sim)
 #g_avg = (uid.get_sum_rating_all_movies() / uid.nratings())
 #avg = (vs + b * g_avg) / (n + b)
 #print(avg)
+'''
 '''
 import math
 import numpy as np
