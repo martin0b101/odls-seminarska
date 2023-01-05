@@ -52,16 +52,48 @@ class UserItemData:
 
 
 # movie id 53355 sonnenallee
-uid = UserItemData("data/user_ratedmovies.dat")
+uid = UserItemData("data/user_ratedmovies.dat", min_ratings=1000)
 
 
-print(len(set(uid.df['movieID'].values)))
-n = uid.get_number_rating_movie(50)
-vs = uid.get_sum_rating_movie(50)
-b = 100
-g_avg = (uid.get_sum_rating_all_movies() / uid.nratings())
-avg = (vs + b * g_avg) / (n + b)
-print(avg)
+#get all users id
+users = list(set(uid.df['userID']))
+#print('users=', users)
+#every user calculate avg rating
+# go through users and get avg for ratings
+user_avg = dict()
+for user in users:
+  user_rating = uid.df[uid.df['userID'] == user]['rating']
+  user_avg[user] = sum(user_rating)/len(user_rating)
+  
+#print(user_avg)
+#print all rating and userId where movieId is 1580
+frist_line_in_fromula = 0
+second_line_in_fromula = 0
+movie1_sqrt = 0
+movie2_sqrt = 0
+for user, avg in user_avg.items(): 
+  ratings_movie1 = list(uid.df[(uid.df['movieID']==1580) & (uid.df['userID']== user)]['rating'].values)
+  ratings_movie2 = list(uid.df[(uid.df['movieID']==780) & (uid.df['userID']== user)]['rating'].values)
+  if ratings_movie1 and ratings_movie2 != []:
+    avg_from_user = user_avg[user]
+    #print('movie1', ratings_movie1[0] - avg_from_user)
+    #print('movie2', ratings_movie2[0] - avg_from_user)
+    frist_line_in_fromula += ((ratings_movie1[0] - avg_from_user) * (ratings_movie2[0] - avg_from_user))
+    movie1_sqrt += ((ratings_movie1[0]-avg_from_user)**2)
+    movie2_sqrt += ((ratings_movie2[0]-avg_from_user)**2)
+
+import math
+sim = frist_line_in_fromula / (math.sqrt(movie1_sqrt)*math.sqrt(movie2_sqrt))
+print("similarity", sim)
+    
+#print(uid.df[['movieID','userID', 'rating']])
+
+##n = uid.get_number_rating_movie(50)
+#vs = uid.get_sum_rating_movie(50)
+#b = 100
+#g_avg = (uid.get_sum_rating_all_movies() / uid.nratings())
+#avg = (vs + b * g_avg) / (n + b)
+#print(avg)
 '''
 import math
 import numpy as np
