@@ -24,7 +24,7 @@ class RandomPredictor:
         self.user_item_data = user_item_data
 
 
-
+'''
 
 md = bf.MovieData("data/movies.dat")
 print(md.get_title(1))
@@ -35,3 +35,4 @@ pred = rp.predict(78)
 items = [1, 3, 20, 50, 100]
 for item in items:
     print("Film: {}, ocena: {}".format(md.get_title(item), pred[item]))
+'''

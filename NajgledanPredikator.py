@@ -19,7 +19,7 @@ class ViewsPredicator:
         return user_ratings
     
 
-
+'''
 md = bf.MovieData('data/movies.dat')
 uim = bo.UserItemData('data/user_ratedmovies.dat')
 vp = ViewsPredicator()
@@ -29,3 +29,4 @@ pred = vp.predict(78)
 items = [4993, 5952, 7153, 50, 100]
 for item in items:
     print("Film: {}, ocena: {}".format(md.get_title(item), pred[item]))
+'''

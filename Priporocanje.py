@@ -34,6 +34,7 @@ class Recommender:
         recommendet_movies_sort = sorted(recommendet_movies, key=lambda t: t[1], reverse=True)
         return recommendet_movies_sort
 
+'''
 md = bf.MovieData('data/movies.dat')
 uim = bo.UserItemData('data/user_ratedmovies.dat')
 rp = pp.AverahePredictor(0)
@@ -43,3 +44,4 @@ rec_items = rec.recommend(78, n=5, rec_seen=False)
 for t in rec_items:
     idmovie, val = t
     print("Film: {}, ocena: {}".format(md.get_title(idmovie), val))
+'''
