@@ -16,8 +16,10 @@ class ItemBasedPredictor:
         for user in self.all_users:
             user_rating = self.user_item_data.df[self.user_item_data.df['userID'] == user]['rating']
             self.user_avg[user] = sum(user_rating) / len(user_rating)
-
-
+        #self.all_sim = self.calculate_all_sim()
+    
+    # calculates all sim for every movie and returns dict 
+    # with {(movieId1, movieId2): similarity} 
     def calculate_all_sim(self):
         # all movies and sim
         movie_sim = dict()
@@ -26,12 +28,13 @@ class ItemBasedPredictor:
         for movieId1 in all_movies_np1:
             for movieId2 in all_movies_np2:
                 if movieId1 != movieId2:
-                    name = f"{int(movieId1)}, {int(movieId2)}"
                     movie_sim[(movieId1, movieId2)] = self.similarity(movieId1, movieId2)
-
         return movie_sim
 
+    # for every sim that is >0 get the number of rating that user gave movie
+    # formula is sum(sim*rating_user)/sum(sim)
     def predict(self, user_id):
+
         pass
 
     def similarity(self, p1, p2):
@@ -80,7 +83,27 @@ rp = ItemBasedPredictor()
 rec = p.Recommender(rp)
 rec.fit(uim)
 
-print(rp.calculate_all_sim())
+
+#calculcate predict
+dict_movies_sim = rp.calculate_all_sim()
+user_id = 78
+formula_sum_of_sim_and_rating = 0
+sum_of_sim = 0
+
+# for every movie i want to predict i have to get sim and then, get the number of 
+# of movie that is similar and then get rating of this movie
+for movies, sim in dict_movies_sim.items():
+    movieid1, movieid2 = movies
+    if sim > 0:
+        sum_of_sim += sim
+        rating_movie1 = uim.get_rating_movie(user_id, movieid1)
+        rating_movie2 = uim.get_rating_movie(user_id, movieid2)
+        formula_sum_of_sim_and_rating += (sim * rating_movie1)
+        formula_sum_of_sim_and_rating += (sim * rating_movie2)
+
+pred_for_movie
+
+
 '''
 #print(uim.movies)
 print("Podobnost med filmoma 'Men in black'(1580) in 'Ghostbusters'(2716): ", rp.similarity(1580, 2716))
@@ -118,8 +141,8 @@ for name_sim in similarty_all_movies[:20]:
     #print("Film1 ", md.get_title(movieId1), " Film2 ", md.get_title(movieId2), "similarity: ", rp.similarity(movieId1, movieId2))
 
 '''
-'''
 
+'''
 rec_items = rp.similarItems(4993, 10)
 print('Filmi podobni "The Lord of the Rings: The Fellowship of the Ring": ')
 for idmovie, val in rec_items:

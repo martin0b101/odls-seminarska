@@ -60,6 +60,9 @@ class UserItemData:
     def return_numpy_df(self):
         return self.df[['movieID', 'userID', 'rating']].to_numpy()
 
+    def get_rating_movie(self, user_id, movie_id):
+        return self.df[self.df['userId'] == user_id & self.df['movieId']==movie_id]['rating'].values
+
 
 # movie id 53355 sonnenallee
 uid = UserItemData("data/user_ratedmovies.dat", min_ratings=1000)

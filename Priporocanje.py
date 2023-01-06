@@ -21,27 +21,22 @@ class Recommender:
         if (rec_seen):
             for movieId, grade in predicted_grade.items():
                 if movieId in watched_movie_list:
-                    if len(recommendet_movies) == n:
-                        break
                     recommendet_movies.append((movieId, grade))
         else:
             for movieId, grade in predicted_grade.items():
                 if movieId not in watched_movie_list:
-                    if len(recommendet_movies) == n:
-                        break
                     recommendet_movies.append((movieId, grade))
         #sort recomended movies
         recommendet_movies_sort = sorted(recommendet_movies, key=lambda t: t[1], reverse=True)
-        return recommendet_movies_sort
+        return recommendet_movies_sort[:n]
 
-'''
+
 md = bf.MovieData('data/movies.dat')
 uim = bo.UserItemData('data/user_ratedmovies.dat')
-rp = pp.AverahePredictor(0)
+rp = pp.AveragePredictor(0)
 rec = Recommender(rp)
 rec.fit(uim)
 rec_items = rec.recommend(78, n=5, rec_seen=False)
 for t in rec_items:
     idmovie, val = t
     print("Film: {}, ocena: {}".format(md.get_title(idmovie), val))
-'''

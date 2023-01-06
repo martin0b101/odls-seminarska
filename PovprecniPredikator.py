@@ -2,7 +2,7 @@ import pandas as pd
 from collections import defaultdict
 
 
-class AverahePredictor:
+class AveragePredictor:
     def __init__(self, b):
         self.b = b
 
