@@ -101,7 +101,7 @@ for movies, sim in dict_movies_sim.items():
         formula_sum_of_sim_and_rating += (sim * rating_movie1)
         formula_sum_of_sim_and_rating += (sim * rating_movie2)
 
-pred_for_movie
+
 
 
 '''
