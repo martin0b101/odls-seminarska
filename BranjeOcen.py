@@ -52,7 +52,7 @@ class UserItemData:
         return list(self.df[self.df['movieID'] == movieId]['rating'].values)
 
     def get_all_users(self):
-        return list(set(uid.df['userID']))
+        return list(set(self.df['userID']))
 
     def get_number_users_rated_movies(self, movie_id1, movie_id2):
         return len(self.df[(self.df['movieID'] == movie_id1) | (self.df['movieID'] == movie_id2)]['userID'])
@@ -61,7 +61,7 @@ class UserItemData:
         return self.df[['movieID', 'userID', 'rating']].to_numpy()
 
     def get_rating_movie(self, user_id, movie_id):
-        return self.df[self.df['userId'] == user_id & self.df['movieId']==movie_id]['rating'].values
+        return self.df[(self.df['userID'] == user_id) & (self.df['movieID'] == movie_id)]['rating'].values
 
 
 # movie id 53355 sonnenallee
@@ -71,6 +71,8 @@ uid = UserItemData("data/user_ratedmovies.dat", min_ratings=1000)
 #print(len((uid.df[(uid.df['movieID'] == 1580) | (uid.df['movieID']==2719)]['userID'])))
 # get all from rating from movies
 
+#print(uid.get_rating_movie(50, 78))
+'''
 users = uid.get_all_users()
 #movieID, userID, rating
 data_frame_nupmy = uid.df[['movieID', 'userID', 'rating']].to_numpy()
@@ -107,7 +109,7 @@ print("similarity", sim)
 
 #(uid.df[(uid.df['movieID'] == p1) & (uid.df['userID'] == user)]['rating'].values
 
-'''
+
 #get all users id
 users = list(set(uid.df['userID']))
 #print('users=', users)
