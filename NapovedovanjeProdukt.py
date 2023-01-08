@@ -16,7 +16,7 @@ class ItemBasedPredictor:
         for user in self.all_users:
             user_rating = self.user_item_data.df[self.user_item_data.df['userID'] == user]['rating']
             self.user_avg[user] = sum(user_rating) / len(user_rating)
-        #self.all_sim = self.calculate_all_sim()
+        self.all_sim = self.calcualte_all_sim_with_numpy()
     
     # calculates all sim for every movie and returns dict 
     # with {(movieId1, movieId2): similarity} 
@@ -43,12 +43,39 @@ class ItemBasedPredictor:
                         movis_sim_np_array.append([movieId1, movieId2, similarity])
         return np.array(movis_sim_np_array)
 
+    def calcualte_all_sim_with_numpy(self):
+        movis_sim_np_array = []
+        all_movies_np1 = np.unique(self.df_numpy[:, 0])
+        all_movies_np2 = np.unique(self.df_numpy[:, 0])
+        for movieId1 in all_movies_np1:
+            for movieId2 in all_movies_np2:
+                if movieId1 != movieId2:
+                    similarity = self.similarity(movieId1, movieId2)
+                    if similarity > 0:
+                        movis_sim_np_array.append([movieId1, movieId2, similarity])
+        return np.array(movis_sim_np_array)
+
 
     # for every sim that is >0 get the number of rating that user gave movie
     # formula is sum(sim*rating_user)/sum(sim)
     def predict(self, user_id):
+        predict_movie_ratings = dict()
+        for movieId in self.all_sim[:, 0]:
+            pred_for_user = self.all_sim[np.where(self.all_sim[:, 0] == movieId)]
+            formula_first_line = 0
+            sum_sim = 0
+            i = 0
+            for movieid2 in pred_for_user[:, 1]:
+                rating = uim.get_rating_movie(user_id, int(movieid2))
+                if rating.size > 0:
+                    sim = pred_for_user[i, 2]
+                    sum_sim += sim
+                    formula_first_line += (sim*rating[0])
+                i+=1
+            pred = formula_first_line/sum_sim
 
-        pass
+            predict_movie_ratings[movieId] = pred
+        return predict_movie_ratings
 
     def similarity(self, p1, p2):
         #check if number of users that graded two movies are enough
@@ -75,6 +102,11 @@ class ItemBasedPredictor:
             return 0.0
         return self.similarity_result
 
+    def return_top20_most_sim(self):
+        sorted_sim = self.all_sim[self.all_sim[:, 2].argsort()][::-1]
+        return sorted_sim[:20]
+
+
     # item is movieId
     def similarItems(self, item, n):
         movies_np_array = np.unique(self.df_numpy[:, 0])
@@ -97,20 +129,9 @@ rec = p.Recommender(rp)
 rec.fit(uim)
 
 
-#calculcate predict
-#dict_movies_sim = rp.calculate_all_sim()
-user_id = 78
-formula_sum_of_sim_and_rating = 0
-sum_of_sim = 0
+print("Predictions for 78: ")
+rec_items = rec.recommend(78, n=15, rec_seen=False)
+for idmovie, val in rec_items:
+    print("Film: {}, ocena: {}".format(md.get_title(idmovie), val))
 
-#all movies_similarity
-all_sim = rp.calcualte_all_sim_with_numpy()
-print(all_sim[0])
-
-# for every movie i want to predict i have to get sim and then, get the number of 
-# of movie that is similar and then get rating of this movie
-
-movieId_rating_dict = dict()
-#all movies
-all_movies = uim.return_numpy_df()[:, 0]
-
+print(rp.return_top20_most_sim)

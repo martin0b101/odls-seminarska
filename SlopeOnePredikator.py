@@ -8,3 +8,6 @@ class SlopeOnePredicator:
 
     def predict(self, user_id):
         pass
+
+
+
